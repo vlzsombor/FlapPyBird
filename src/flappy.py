@@ -110,7 +110,7 @@ class Flappy:
         # Get outputs from brain
         outs = self.brain.get_outputs(inputs)
         
-        outs =[0.89, sigmoid(inputs[0]*-0.922838921439954 + inputs[1]*1.8011388502959025)]
+        outs =[0.89, sigmoid(inputs[0]*-0.922838921439954 + inputs[1] * 1.8011388502959025)]
         # with open("C:\\Users\\ZsomborVeres-Lakos\\Documents\\flappy_outputs.csv", 'a') as f:
         #     f.write(str(outs[1]) + '\n')
         # use outputs to flap or not
