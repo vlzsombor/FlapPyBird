@@ -41,9 +41,6 @@ class Node:
         self.output = self.activation_function(s)
         pass
     def show(self, ds):
-
-        ##$$
-        error
         pygame.draw.circle(ds, self.bcolor, self.pos, self.radius + self.border_radius)
         pygame.draw.circle(ds, self.color, self.pos, self.radius)
         pass
