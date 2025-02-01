@@ -20,7 +20,7 @@ class Gene:
         clone.innovation = self.innovation
         return clone
     
-    def mutation(self):
+    def mutate(self):
         if random.random() < 0.1:
             self.weight = default_weight()
         else:
