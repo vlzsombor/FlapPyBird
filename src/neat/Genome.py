@@ -167,5 +167,3 @@ class Genome:
                 final_outputs.append(self.nodes[n].output)
 
             return final_outputs
-
-

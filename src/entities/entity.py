@@ -2,6 +2,8 @@ from typing import Optional
 
 import pygame
 
+from src import entities
+
 from ..utils import GameConfig, get_hit_mask, pixel_collision
 
 

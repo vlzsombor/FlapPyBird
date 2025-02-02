@@ -26,17 +26,19 @@
 # def bad_greeting(name: str) -> int:
 #     return 'Hello ' + name  # Unsupported operand types for * ("str" and "str")
 
+from typing import TypeVar, Generic
+import pygame
 
+T = TypeVar("T", bound=pygame.sprite.Sprite)  # Restrict to Sprite subclasses
 
-print("hello")
+class SpriteGroup(pygame.sprite.Group, Generic[T]):
+    """A type-safe pygame sprite group."""
+    pass
 
-i = 0
-while True:
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
 
-    print("hello " + str(i))
-
-    i += 1
-
-    if(i==10):
-        break
-
+# Usage
+enemies: SpriteGroup[Enemy] = SpriteGroup()
+enemies.add(Enemy())  # ✅ Works

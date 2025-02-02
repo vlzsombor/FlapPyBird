@@ -82,55 +82,21 @@ class Flappy:
         )
         screen_tap = event.type == pygame.FINGERDOWN
 
-        cp = self.computer_prediction()
 
-        return m_left or space_or_up or screen_tap or cp
-
-    def computer_prediction(self) -> bool:
-
-        return False
-    
-
-    def get_inputs(self, pipes: Pipes) -> list:
-        inputs = []
-
-        input2 = (pipes.upper[0].y - self.player.y) / self.config.window.height
-        input3 = (self.player.y - pipes.upper[0].y) / self.config.window.height
-           # (self.rect.y - closest.bottomPos) / win_height
-        inputs.append(input2)  # Dist from bird to top Pipe
-        inputs.append(input3)  # Dist from bird to bottom Pipe
-        return inputs
-
-    def think(self, pipes: Pipes) -> bool:
-        inputs = self.get_inputs(pipes)
-
-        should_flap = False
-        sigmoid = lambda x: 1 / (1 + math.exp(-x))
-
-        # Get outputs from brain
-        # outs = self.brain.get_outputs(inputs)
-        
-        outs =[0.89, sigmoid(inputs[0]*-0.922838921439954 + inputs[1] * 1.8011388502959025)]
-        # with open("C:\\Users\\ZsomborVeres-Lakos\\Documents\\flappy_outputs.csv", 'a') as f:
-        #     f.write(str(outs[1]) + '\n')
-        # use outputs to flap or not
-        if outs[1] > outs[0]:
-            should_flap = True
-        
-        if should_flap:
-            pygame.event.post(pygame.event.Event(KEYDOWN, {"key": K_SPACE}))
-
-        return should_flap
+        return m_left or space_or_up or screen_tap
 
     async def play(self):
         self.score.reset()
         self.player.set_mode(PlayerMode.NORMAL)
 
         while True:
+            # alive or dead
             if self.player.collided(self.pipes, self.floor):
                 return
-            
-            computer_decision = self.think(self.pipes)
+            self.player.update(self.pipes, self.config.window)
+
+
+            # self.think(self.pipes)
             for i, pipe in enumerate(self.pipes.upper):
                 if self.player.crossed(pipe):
                     self.score.add()
