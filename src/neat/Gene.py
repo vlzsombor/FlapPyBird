@@ -1,13 +1,12 @@
 import random
 import pygame
 
-from src.neat.Node import Node
- 
- 
+from src.neat.node import Node
+
 class Gene:
     def __init__(self, in_node: Node, out_node: Node):
-        self.in_node: Node = in_node
-        self.out_node: Node= out_node
+        self.in_node = in_node
+        self.out_node = out_node
         self.weight = default_weight() 
         self.enabled = True
         self.innovation = 0

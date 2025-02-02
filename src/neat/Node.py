@@ -6,7 +6,9 @@ import math
 from typing import List
 from typing import Callable
 
-from src.neat.Gene import Gene
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from src.neat.gene import Gene
 
 class Node:
     def __init__(self, number: int, layer: int):

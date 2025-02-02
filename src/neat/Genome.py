@@ -1,8 +1,9 @@
 import random
 from typing import List
-from src.neat.Gene import Gene
-from src.neat.GeneHistory import GeneHistory
-from src.neat.Node import Node
+
+from src.neat.gene import Gene
+from .geneHistory import GeneHistory
+from .node import Node
 
 
 class Genome:
@@ -143,7 +144,7 @@ class Genome:
     def get_outputs(self, inputs: List[float]):
         if len(inputs) != self.n_inputs:
             print("Wrong number of inputs")
-            return [-1]
+            return [-1.0]
         
 
         for i in range(self.n_inputs):
@@ -156,14 +157,13 @@ class Genome:
             for n in range(len(self.nodes)):
                 if self.nodes[n].layer == layer:
                     nodes_in_layer.append(self.nodes[n])
-            
             for n in range(len(nodes_in_layer)):
                 nodes_in_layer[n].calculate()
 
-            final_outputs: List[float] = []
+        final_outputs: List[float] = []
 
-            for n in range(self.n_inputs, self.n_inputs + self.n_outputs):
-                self.nodes[n].calculate()
-                final_outputs.append(self.nodes[n].output)
+        for n in range(self.n_inputs, self.n_inputs + self.n_outputs):
+            self.nodes[n].calculate()
+            final_outputs.append(self.nodes[n].output)
 
-            return final_outputs
+        return final_outputs

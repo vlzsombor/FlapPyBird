@@ -5,6 +5,8 @@ import sys
 import pygame
 from pygame.locals import K_ESCAPE, K_SPACE, K_UP, KEYDOWN, QUIT
 
+from src.neat.autoPlayer import AutoPlayer, GeneHistory
+
 from .entities import (
     Background,
     Floor,
@@ -33,13 +35,18 @@ class Flappy:
             window=window,
             images=images,
             sounds=Sounds(),
+            n_inputs=4,
+            n_outputs=2
         )
 
     async def start(self):
         while True:
             self.background = Background(self.config)
             self.floor = Floor(self.config)
-            self.player = Player(self.config)
+
+            self.gh = GeneHistory(self.config.n_inputs, self.config.n_outputs)
+
+            self.player = AutoPlayer(self.config, self.gh)
             self.welcome_message = WelcomeMessage(self.config)
             self.game_over_message = GameOver(self.config)
             self.pipes = Pipes(self.config)

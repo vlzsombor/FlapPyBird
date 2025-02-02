@@ -1,5 +1,6 @@
 import pygame
-from src.neat.Bird import Bird
+
+from src.neat.AutoPlayer import AutoPlayer
 from .entities import (
     Player,
     Pipes
@@ -13,13 +14,13 @@ class Population:
         self.best_fitness = 0
 
 
-    def update(self, pipes: Pipes, player: Player, window: Window):
-        best_bird = Bird()
+    # def update(self, pipes: Pipes, player: Player, window: Window):
+    #     best_bird = AutoPlayer()
 
-        for bird in self.population:
-            bird.update(pipes, player, window)
-            if bird.fitness > self.best_fitness:
-                self.best_fitness = bird.fitness
-                best_bird = bird
-        return best_bird
+    #     for bird in self.population:
+    #         bird.update(pipes, player, window)
+    #         if bird.fitness > self.best_fitness:
+    #             self.best_fitness = bird.fitness
+    #             best_bird = bird
+    #     return best_bird
 

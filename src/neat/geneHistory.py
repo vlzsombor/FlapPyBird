@@ -1,6 +1,7 @@
 from typing import List
-from src.neat.Node import Node
-from src.neat.Gene import Gene
+
+from src.neat.gene import Gene
+from .node import Node
 
 class GeneHistory:
     def __init__(self, n_inputs: int, n_outputs: int):
