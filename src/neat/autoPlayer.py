@@ -15,6 +15,10 @@ class AutoPlayer(Player):
         super().__init__(config) # type: ignore
         self.gh = gh  # The genome history
         self.brain = Genome(gh)
+        # Random mutations for brain at start
+        for _ in range(10):
+            self.brain.mutate()
+    
 
     def update(self, pipes: Pipes, window: Window):
         # # if self.on_ground:
@@ -25,9 +29,15 @@ class AutoPlayer(Player):
         
     def get_inputs(self, pipes: Pipes, window: Window) -> List[float]:
         inputs: List[float] = []
+        y_pos_ground = 512 # I guess thats the ground y height
+        input0 = (y_pos_ground - self.rect.y) / window.height  # bird height
+        input1 = (pipes.upper[0].x - self.rect.x) / window.width  # Dist from pipe
+
         input2 = (pipes.upper[0].y - self.y) / window.height
-        input3 = (self.y - pipes.upper[0].y) / window.height
+        input3 = (self.y - pipes.lower[0].y) / window.height
            # (self.rect.y - closest.bottomPos) / win_height
+        inputs.append(input0)  # Dist from bird to top Pipe
+        inputs.append(input1)  # Dist from bird to top Pipe
         inputs.append(input2)  # Dist from bird to top Pipe
         inputs.append(input3)  # Dist from bird to bottom Pipe
         return inputs

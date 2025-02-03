@@ -47,6 +47,7 @@ class Flappy:
             self.gh = GeneHistory(self.config.n_inputs, self.config.n_outputs)
 
             self.player = AutoPlayer(self.config, self.gh)
+            #self.player = Player(self.config)
             self.welcome_message = WelcomeMessage(self.config)
             self.game_over_message = GameOver(self.config)
             self.pipes = Pipes(self.config)
