@@ -6,6 +6,7 @@ import pygame
 from pygame.locals import K_ESCAPE, K_SPACE, K_UP, KEYDOWN, QUIT
 
 from src.neat.autoPlayer import AutoPlayer, GeneHistory
+from src.population import Population
 
 from .entities import (
     Background,
@@ -28,6 +29,10 @@ class Flappy:
         screen = pygame.display.set_mode((window.width, window.height))
         images = Images()
 
+
+        self.population = Population(pygame.sprite.Group())
+
+
         self.config = GameConfig(
             screen=screen,
             clock=pygame.time.Clock(),
@@ -38,13 +43,14 @@ class Flappy:
             n_inputs=4,
             n_outputs=2
         )
+        self.gh = GeneHistory(self.config.n_inputs, self.config.n_outputs)
+
 
     async def start(self):
         while True:
             self.background = Background(self.config)
             self.floor = Floor(self.config)
 
-            self.gh = GeneHistory(self.config.n_inputs, self.config.n_outputs)
 
             self.player = AutoPlayer(self.config, self.gh)
             #self.player = Player(self.config)
@@ -52,9 +58,15 @@ class Flappy:
             self.game_over_message = GameOver(self.config)
             self.pipes = Pipes(self.config)
             self.score = Score(self.config)
-            await self.splash()
+            # await self.splash()
             await self.play()
-            await self.game_over()
+            # await self.game_over()
+            # game over:
+            self.population.reset()
+            
+
+
+            
 
     async def splash(self):
         """Shows welcome splash screen animation of flappy bird"""
@@ -96,6 +108,9 @@ class Flappy:
     async def play(self):
         self.score.reset()
         self.player.set_mode(PlayerMode.NORMAL)
+
+
+
 
         while True:
             # alive or dead

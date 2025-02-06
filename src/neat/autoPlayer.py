@@ -21,10 +21,10 @@ class AutoPlayer(Player):
         if not clone:
             for _ in range(10):
                 self.brain.mutate()
-    def mate(self, otherParent: Self):
+    def mate(self, partner: Self):
         child = AutoPlayer(self.config, self.gh)
         child.brain = self.brain.crossover(partner.brain)
-        pass
+        return child
 
     def update(self, pipes: Pipes, window: Window):
         # # if self.on_ground:

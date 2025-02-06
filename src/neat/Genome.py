@@ -1,5 +1,7 @@
+from calendar import c
+from operator import ge
 import random
-from typing import List
+from typing import List, Self
 
 from src.neat.gene import Gene
 from .geneHistory import GeneHistory
@@ -96,6 +98,65 @@ class Genome:
             self.add_node()
         pass
     ####
+
+
+    def crossover(self, partner: Self):
+        child = Genome(self.gh)
+        child.nodes.clear()
+        
+        try:
+#            p1_highest_inno = max()
+            p1_highest_inno = max([(a.innovation) for a in self.genes])
+        except Exception:
+            p1_highest_inno = 0
+
+        try:
+            p2_highest_inno = max([(a.innovation) for a in partner.genes])
+        except Exception:
+            p2_highest_inno = 0
+
+
+        if self.total_nodes > partner.total_nodes:
+            child.total_nodes = self.total_nodes
+            for i in range(self.total_nodes):
+                child.nodes.append(self.nodes[i].clone())
+        else:
+            child.total_nodes = partner.total_nodes
+            for i in range(partner.total_nodes):
+                child.nodes.append(partner.nodes[i].clone())
+
+        highest_inno = (
+            p1_highest_inno if self.fitness > partner.fitness else p2_highest_inno
+        )
+
+
+        for i in range(highest_inno + 1):
+            selfGeneExists = self.exists(i)
+            partnerGeneExists = partner.exists(i)
+
+            v: Self | None = None
+            if(selfGeneExists and partnerGeneExists):
+                v = self if random.random() > 0.5 else partner
+            elif(selfGeneExists):
+                v = self
+            elif(partnerGeneExists):
+                v = partner
+            
+            if not v:
+                continue
+
+            if (gene := v.get_gene(i)):
+                    child.genes.append(gene)
+            child.connect_genes()
+            return child
+
+        pass
+
+    def get_gene(self, inno: int):
+        for g in self.genes:
+            if g.innovation == inno:
+                return g.clone()
+        print('Gene not found')
 
     def add_node(self):
         if len(self.genes) == 0:
