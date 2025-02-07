@@ -31,7 +31,7 @@ class AutoPlayer(Player):
         # #     return
         # if self.alive:
         #     self.fitness += 1
-        self.think(pipes, window)
+        return self.think(pipes, window)
         
     def get_inputs(self, pipes: Pipes, window: Window) -> List[float]:
         inputs: List[float] = []
@@ -61,7 +61,7 @@ class AutoPlayer(Player):
         if outs[1] > outs[0]:
             should_flap = True
         
-        if should_flap:
-            pygame.event.post(pygame.event.Event(pygame.KEYDOWN, {"key": pygame.K_SPACE}))
+        # if should_flap:
+        #     pygame.event.post(pygame.event.Event(pygame.KEYDOWN, {"key": pygame.K_SPACE}))
 
         return should_flap

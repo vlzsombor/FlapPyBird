@@ -29,10 +29,6 @@ class Flappy:
         screen = pygame.display.set_mode((window.width, window.height))
         images = Images()
 
-
-        self.population = Population(pygame.sprite.Group())
-
-
         self.config = GameConfig(
             screen=screen,
             clock=pygame.time.Clock(),
@@ -44,6 +40,7 @@ class Flappy:
             n_outputs=2
         )
         self.gh = GeneHistory(self.config.n_inputs, self.config.n_outputs)
+        self.population = Population(self.config, self.gh)
 
 
     async def start(self):
@@ -52,7 +49,7 @@ class Flappy:
             self.floor = Floor(self.config)
 
 
-            self.player = AutoPlayer(self.config, self.gh)
+            # self.player = AutoPlayer(self.config, self.gh)
             #self.player = Player(self.config)
             self.welcome_message = WelcomeMessage(self.config)
             self.game_over_message = GameOver(self.config)
@@ -64,14 +61,10 @@ class Flappy:
             # game over:
             self.population.reset()
             
-
-
-            
-
-    async def splash(self):
+    async def splash(self, player):
         """Shows welcome splash screen animation of flappy bird"""
 
-        self.player.set_mode(PlayerMode.SHM)
+        player.set_mode(PlayerMode.SHM)
 
         while True:
             for event in pygame.event.get():
@@ -81,7 +74,7 @@ class Flappy:
 
             self.background.tick()
             self.floor.tick()
-            self.player.tick()
+            player.tick()
             self.welcome_message.tick()
 
             pygame.display.update()
@@ -107,43 +100,43 @@ class Flappy:
 
     async def play(self):
         self.score.reset()
-        self.player.set_mode(PlayerMode.NORMAL)
-
-
-
-
         while True:
             # alive or dead
-            if self.player.collided(self.pipes, self.floor):
-                return
-            self.player.update(self.pipes, self.config.window)
+            for player in self.population.population:
+                player.set_mode(PlayerMode.NORMAL)
+                if player.collided(self.pipes, self.floor):
+                    return
+                autoFlap = player.update(self.pipes, self.config.window)
 
 
-            # self.think(self.pipes)
-            for i, pipe in enumerate(self.pipes.upper):
-                if self.player.crossed(pipe):
-                    self.score.add()
-            
-            for event in pygame.event.get():
-                self.check_quit_event(event)
-                # $$$ is tap event, this controls the flap
-                if self.is_tap_event(event):
-                    self.player.flap()
+                # self.think(self.pipes)
+                for i, pipe in enumerate(self.pipes.upper):
+                    if player.crossed(pipe):
+                        self.score.add()
 
-            self.background.tick()
-            self.floor.tick()
-            self.pipes.tick()
-            self.score.tick()
-            self.player.tick()
+                if autoFlap:
+                    player.flap()
+                else:
+                    for event in pygame.event.get():
+                        self.check_quit_event(event)
+                        # $$$ is tap event, this controls the flap
+                        if self.is_tap_event(event):
+                            player.flap()
 
-            pygame.display.update()
-            await asyncio.sleep(0)
-            self.config.tick()
+                self.background.tick()
+                self.floor.tick()
+                self.pipes.tick()
+                self.score.tick()
+                player.tick()
 
-    async def game_over(self):
+                pygame.display.update()
+                await asyncio.sleep(0)
+                self.config.tick()
+
+    async def game_over(self, player):
         """crashes the player down and shows gameover image"""
 
-        self.player.set_mode(PlayerMode.CRASH)
+        player.set_mode(PlayerMode.CRASH)
         self.pipes.stop()
         self.floor.stop()
 
@@ -151,14 +144,14 @@ class Flappy:
             for event in pygame.event.get():
                 self.check_quit_event(event)
                 if self.is_tap_event(event):
-                    if self.player.y + self.player.h >= self.floor.y - 1:
+                    if player.y + player.h >= self.floor.y - 1:
                         return
 
             self.background.tick()
             self.floor.tick()
             self.pipes.tick()
             self.score.tick()
-            self.player.tick()
+            player.tick()
             self.game_over_message.tick()
 
             self.config.tick()
