@@ -17,6 +17,7 @@ class AutoPlayer(Player):
         self.gh = gh  # The genome history
         self.brain = Genome(gh)
         self.fitness = 0
+        self.alive = True
         # Random mutations for brain at start
         if not clone:
             for _ in range(10):
@@ -52,16 +53,14 @@ class AutoPlayer(Player):
         inputs = self.get_inputs(pipes, window)
         should_flap = False
         # Get outputs from brain
-        outs = self.brain.get_outputs(inputs)
-        #sigmoid: Callable[[float], float] = lambda x: 1 / (1 + math.exp(-x))
-        # outs: List[float] =[0.89, sigmoid(inputs[0]*-0.922838921439954 + inputs[1] * 1.8011388502959025)]
+        #outs = self.brain.get_outputs(inputs)
+        sigmoid: Callable[[float], float] = lambda x: 1 / (1 + math.exp(-x))
+        outs: List[float] =[0.89, sigmoid(inputs[0]*-0.922838921439954 + inputs[1] * 1.8011388502959025)]
         # with open("C:\\Users\\ZsomborVeres-Lakos\\Documents\\flappy_outputs.csv", 'a') as f:
         #     f.write(str(outs[1]) + '\n')
         # use outputs to flap or not
         if outs[1] > outs[0]:
             should_flap = True
         
-        # if should_flap:
-        #     pygame.event.post(pygame.event.Event(pygame.KEYDOWN, {"key": pygame.K_SPACE}))
-
+ 
         return should_flap

@@ -5,7 +5,7 @@ from src.flappy import AutoPlayer, GeneHistory
 from src.utils import GameConfig
 
 class Population:
-    def __init__(self, config: GameConfig, gh: GeneHistory, pop_size: int = 3) -> None: 
+    def __init__(self, config: GameConfig, gh: GeneHistory, pop_size: int = 50) -> None: 
         self.best_fitness = 0
         self.pop_size = pop_size  # Size of population
         self.population: List[AutoPlayer] = []  # Population is sprite group
