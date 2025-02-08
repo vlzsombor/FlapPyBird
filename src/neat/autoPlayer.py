@@ -1,4 +1,5 @@
 import math
+import random
 from typing import Callable, List
 from typing import Self
 
@@ -55,12 +56,13 @@ class AutoPlayer(Player):
         # Get outputs from brain
         #outs = self.brain.get_outputs(inputs)
         sigmoid: Callable[[float], float] = lambda x: 1 / (1 + math.exp(-x))
-        outs: List[float] =[0.89, sigmoid(inputs[0]*-0.922838921439954 + inputs[1] * 1.8011388502959025)]
+        #outs: List[float] =[0.89, sigmoid(inputs[2]*-0.922838921439954 + -inputs[2] * 1.8011388502959025)]
+        outs: List[float] =[0.89, sigmoid(-2.72397777 * inputs[2])]
         # with open("C:\\Users\\ZsomborVeres-Lakos\\Documents\\flappy_outputs.csv", 'a') as f:
         #     f.write(str(outs[1]) + '\n')
         # use outputs to flap or not
         if outs[1] > outs[0]:
             should_flap = True
-        
+       
  
         return should_flap
