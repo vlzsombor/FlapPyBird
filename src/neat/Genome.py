@@ -166,7 +166,6 @@ class Genome:
             self.gh.highest_hidden += 1
 
         n = Node(self.total_nodes, random.randint(2, self.gh.highest_hidden))
-        self.total_nodes += 1
 
         g = random.choice(self.genes)
         l1 = g.in_node.layer
@@ -181,8 +180,15 @@ class Genome:
             l2 = g.out_node.layer
             if l2 == 1:
                 l2 = 1000000
-        self.connect_nodes
+        self.connect_nodes(g.in_node, n)
+        self.connect_nodes(n, g.out_node)
+        self.genes[-1].weight = 1.0
+        self.genes[-2].weight = g.weight
+        g.enabled = False
+        self.nodes.append(n)
+        self.total_nodes += 1
 
+        pass
 
     def get_node(self, n: int):
         for i in range(len(self.nodes)):
