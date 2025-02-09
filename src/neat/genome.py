@@ -147,10 +147,8 @@ class Genome:
 
             if (gene := v.get_gene(i)):
                     child.genes.append(gene)
-            child.connect_genes()
-            return child
-
-        pass
+        child.connect_genes()
+        return child
 
     def get_gene(self, inno: int):
         for g in self.genes:

@@ -90,6 +90,8 @@ class Flappy:
         ):
             pygame.quit()
             sys.exit()
+        if event.type == KEYDOWN and event.key == pygame.K_r:
+            return True
 
     def is_tap_event(self, event):
         m_left, _, _ = pygame.mouse.get_pressed()
@@ -108,15 +110,19 @@ class Flappy:
             player.set_mode(PlayerMode.NORMAL)
 
 
-
         while True:
-
             for player in self.population.population:
                 if not player.alive:
                     continue
+                
+
+                player.fitness += 1
+
                 # alive or dead
                 if player.collided(self.pipes, self.floor):
                     player.alive = False
+                    if sum(p.alive for p in self.population.population) == 1:
+                        print('hello')
                     if all(not p.alive for p in self.population.population):
                         return
 
@@ -131,20 +137,24 @@ class Flappy:
                     player.flap()
                 else:
                     for event in pygame.event.get():
-                        self.check_quit_event(event)
+                        if(self.check_quit_event(event)):
+                            return
                         # $$$ is tap event, this controls the flap
                         if self.is_tap_event(event):
                             player.flap()
-
-                self.background.tick()
-                self.floor.tick()
-                self.pipes.tick()
-                self.score.tick()
                 player.tick()
-
                 pygame.display.update()
                 await asyncio.sleep(0)
-                self.config.tick()
+
+
+            self.background.tick()
+            self.floor.tick()
+            self.pipes.tick()
+            self.score.tick()
+
+            pygame.display.update()
+            await asyncio.sleep(0)
+            self.config.tick()
 
     async def game_over(self):
         """crashes the player down and shows gameover image"""
