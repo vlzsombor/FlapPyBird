@@ -111,6 +111,8 @@ class Flappy:
 
 
         while True:
+            self.background.tick()
+
             for player in self.population.population:
                 if not player.alive:
                     continue
@@ -143,11 +145,7 @@ class Flappy:
                         if self.is_tap_event(event):
                             player.flap()
                 player.tick()
-                pygame.display.update()
-                await asyncio.sleep(0)
 
-
-            self.background.tick()
             self.floor.tick()
             self.pipes.tick()
             self.score.tick()

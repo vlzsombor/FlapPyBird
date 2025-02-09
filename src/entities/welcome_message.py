@@ -3,7 +3,7 @@ from .entity import Entity
 
 
 class WelcomeMessage(Entity):
-    def __init__(self, config: GameConfig) -> None:
+    def __init__(self, config:  GameConfig) -> None:
         image = config.images.welcome_message
         super().__init__(
             config=config,
