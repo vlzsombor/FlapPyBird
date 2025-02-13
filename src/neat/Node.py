@@ -10,13 +10,15 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from src.neat.gene import Gene
 
+activation_function: Callable[[float], float] = lambda x : 1 / (1 + math.exp(-x))
+
+
 class Node:
     def __init__(self, number: int, layer: int):
         self.number: int = number
         self.layer: int = layer
         self.output: float = 0
         self.in_genes: List[Gene]  = []
-        self.activation_function: Callable[[float], float] = lambda x : 1 / (1 + math.exp(-x))
 
         # showing
         self.color = (255, 255, 255)
@@ -44,7 +46,7 @@ class Node:
             if g.enabled:
                 s += g.in_node.output * g.weight
         
-        self.output = self.activation_function(s)
+        self.output = activation_function(s)
         pass
     def show(self, ds: pygame.Surface):
         pygame.draw.circle(ds, self.bcolor, self.pos, self.radius + self.border_radius)

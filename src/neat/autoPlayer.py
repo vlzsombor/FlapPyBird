@@ -13,16 +13,21 @@ from src.utils import GameConfig, Window
 
 
 class AutoPlayer(Player):
-    def __init__(self, config: GameConfig, gh: GeneHistory, clone: bool = False) -> None:
+    def __init__(self, config: GameConfig, gh: GeneHistory, clone: bool = False, brain: Genome | None = None) -> None:
         super().__init__(config) # type: ignore
         self.gh = gh  # The genome history
-        self.brain = Genome(gh)
+
+        if brain is not None:
+            self.brain = brain
+        else:
+            self.brain = Genome(gh)
         self.fitness = 0
         self.alive = True
         # Random mutations for brain at start
         if not clone:
             for _ in range(10):
-                self.brain.mutate()
+                #self.brain.mutate()
+                pass
     def mate(self, partner: Self):
         child = AutoPlayer(self.config, self.gh)
         child.brain = self.brain.crossover(partner.brain)

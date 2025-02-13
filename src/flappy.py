@@ -41,7 +41,7 @@ class Flappy:
             n_outputs=2
         )
         self.gh = GeneHistory(self.config.n_inputs, self.config.n_outputs)
-        self.population = Population(self.config, self.gh)
+        self.population = Population(self.config, self.gh, testAi = True)
 
 
     async def start(self):
@@ -112,6 +112,9 @@ class Flappy:
 
         while True:
             self.background.tick()
+            self.floor.tick()
+            self.pipes.tick()
+            self.score.tick()
 
             for player in self.population.population:
                 if not player.alive:
@@ -146,9 +149,7 @@ class Flappy:
                             player.flap()
                 player.tick()
 
-            self.floor.tick()
-            self.pipes.tick()
-            self.score.tick()
+
 
             pygame.display.update()
             await asyncio.sleep(0)

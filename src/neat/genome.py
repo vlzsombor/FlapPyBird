@@ -9,7 +9,7 @@ from .node import Node
 
 
 class Genome:
-    def __init__(self, gh: GeneHistory, c1: float = 1.0, c2: float = 1.0, c3: float = 1.0):
+    def __init__(self, gh: GeneHistory):
         self.gh: GeneHistory = gh
         self.n_inputs: int = self.gh.n_inputs
         self.n_outputs: int = gh.n_outputs
@@ -17,9 +17,6 @@ class Genome:
         self.nodes: List[Node] = []
         self.genes: List[Gene] = []
 
-        self.c1 = c1
-        self.c2 = c2
-        self.c3 = c3
 
 
         self.fitness = random.uniform(0,200)
